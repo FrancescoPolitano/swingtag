@@ -1,6 +1,6 @@
 # How this project is specified
 
-placard is built with spec-driven development. Decisions are taken in the spec,
+swingtag is built with spec-driven development. Decisions are taken in the spec,
 before code, and the code follows the spec. Six phases, in order:
 
 1. **Spikes** (`spec/spikes/`). Small throwaway code that answers one unknown each.

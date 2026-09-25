@@ -34,7 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from backlog import BACKLOG  # noqa: E402
 
-OWNER, REPO, PROJECT_NUMBER = "FrancescoPolitano", "placard", 1
+OWNER, REPO, PROJECT_NUMBER = "FrancescoPolitano", "swingtag", 1
 STATE = Path(__file__).parent / "backlog-issues.json"
 PAUSE = 1.0  # seconds between content-creating calls
 

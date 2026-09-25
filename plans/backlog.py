@@ -1,4 +1,4 @@
-"""The placard backlog as data: epics > stories > tasks and experiments.
+"""The swingtag backlog as data: epics > stories > tasks and experiments.
 
 Source of truth for the GitHub issues and the GitHub Project board; the issues
 are created from this file by `plans/create_backlog.py`. Each entry:
@@ -64,9 +64,9 @@ BACKLOG = [
     item("assumptions-register", T, "Create the technical assumptions register", "S1.2",
          spec="spec/ASSUMPTIONS.md", done=["every technical assumption listed with experiment and status"],
          closed=True),
-    item("spec-review", T, "Owner review of SPEC 0.2 and decision on open questions Q-1, Q-2", "S1.2",
-         spec="SPEC 14", what="License (recommended MIT) and final name. Q-3 (permission) resolved: not needed.",
-         done=["review comments applied", "Q-1 and Q-2 answered in SPEC 14", "SPEC status: approved"]),
+    item("spec-review", T, "Owner review of SPEC 0.2 and decision on the license (Q-1)", "S1.2",
+         spec="SPEC 14", what="License (recommended MIT). Q-2 resolved: name swingtag. Q-3 resolved: no permission needed.",
+         done=["review comments applied", "Q-1 answered in SPEC 14", "SPEC status: approved"]),
     item("test-plan", T, "Write spec/TEST-PLAN.md (phase 4)", "S1.2", spec="spec/README.md phase 4",
          what="Every test with name, input, expected output; unit, Terraform, live and device "
               "levels; mapped to FR/EC/US.",
@@ -90,7 +90,7 @@ BACKLOG = [
     item("aws-account", T, "Choose the AWS account for experiments",
          "S1.3", what="Decided 2026-09-25: experiments run on the owner's existing lab account; the "
                       "CLI profile lives in the owner's local configuration, never in the repository. "
-                      "Every experiment resource is tagged project=placard and destroyed after use.",
+                      "Every experiment resource is tagged project=swingtag and destroyed after use.",
          done=["account decided", "tagging and destroy-after-use rule stated"], closed=True),
     item("aws-harness", T, "Experiment harness: minimal Terraform stack in spec/experiments/aws/",
          "S1.3", area="infra",
@@ -174,7 +174,7 @@ BACKLOG = [
          done=["pytest runs locally and in GitHub Actions", "terraform fmt/validate in CI"]),
     item("scaffold", T, "pyproject, src layout, pytest config, Makefile test target", "S2.0",
          area="core", spec="10.2, 10.10",
-         done=["make test runs an empty suite green", "src/placard importable in tests"],
+         done=["make test runs an empty suite green", "src/swingtag importable in tests"],
          deps=["impl-plan"]),
     item("ci", T, "GitHub Actions: pytest, terraform fmt -check and validate", "S2.0", area="core",
          done=["workflow green on main", "fails on a formatting error (verified once)"],
@@ -332,7 +332,7 @@ BACKLOG = [
                "token secret with ignore_changes", "no wildcard resources"],
          deps=["infra-interface", "build-lambda", "exp-t-49"]),
     item("build-lambda", T, "scripts/build_lambda.sh", "S5.2", area="infra", spec="A-6, T-30",
-         done=["build/lambda contains placard and qrcode 8.2 only"], deps=["scaffold", "exp-t-30"]),
+         done=["build/lambda contains swingtag and qrcode 8.2 only"], deps=["scaffold", "exp-t-30"]),
     item("S5.3", S, "Delivery (US-11, US-14, US-18)", "E5", area="infra", done=["all tasks closed"]),
     item("infra-cloudfront", T, "cloudfront.tf: distribution, OAC, error responses, headers policy",
          "S5.3", area="infra", spec="10.7, T-38, T-39, T-41, T-42",
@@ -435,7 +435,7 @@ BACKLOG = [
     item("E8", E, "Documentation and release", area="docs",
          what="README, release verification on real infrastructure, going public.",
          done=["README published", "all ORIGIN assumptions re-run", "repository public"]),
-    item("S8.1", S, "Stranger understands placard in a minute (US-1)", "E8", area="docs",
+    item("S8.1", S, "Stranger understands swingtag in a minute (US-1)", "E8", area="docs",
          spec="US-1, FR-50", done=["all tasks closed"]),
     item("readme", T, "README per FR-50", "S8.1", area="docs", spec="FR-50",
          done=["sections in the FR-50 order", "fictional disclaimer", "domain warning"],
@@ -446,12 +446,12 @@ BACKLOG = [
                "ex-exhibition-content"]),
     item("license", T, "Add LICENSE", "S8.1", area="docs", spec="Q-1", deps=["spec-review"],
          done=["LICENSE file matches the chosen license"]),
-    item("S8.2", S, "Release verification on placard infrastructure", "E8", area="docs",
+    item("S8.2", S, "Release verification on swingtag infrastructure", "E8", area="docs",
          what="As the owner, I want every assumption observed only in the origin system "
-              "re-run on placard before release.",
+              "re-run on swingtag before release.",
          done=["ORIGIN entries in ASSUMPTIONS.md turned CONFIRMED"]),
 ] + [
-    item(f"rel-{tid.lower()}", X, f"Re-run {tid} on placard: {title}", "S8.2", area="docs",
+    item(f"rel-{tid.lower()}", X, f"Re-run {tid} on swingtag: {title}", "S8.2", area="docs",
          spec=tid, done=[f"ASSUMPTIONS.md {tid} CONFIRMED with command and evidence"],
          deps=["examples-main"])
     for tid, title in [
@@ -472,8 +472,11 @@ BACKLOG = [
     item("permission", T, "Obtain permission from the origin system's owner", "S8.3", area="docs",
          spec="Q-3", what="Not needed: owner decision of 2026-09-25. Closed as not planned.",
          done=["decision recorded in SPEC 14"], closed=True, reason="not_planned"),
-    item("name-check", T, "Check the name placard on GitHub, PyPI and general search", "S8.3",
-         area="docs", spec="Q-2", done=["decision recorded in SPEC 14"]),
+    item("name-check", T, "Check the project name on GitHub, PyPI and npm", "S8.3",
+         area="docs", spec="Q-2",
+         what="Done 2026-09-25 with a positioning study: placard taken everywhere; swingtag has 0 "
+              "GitHub repositories and is free on PyPI and npm. Repository and board renamed.",
+         done=["decision recorded in SPEC 14", "repository and project renamed"], closed=True),
     item("sanitise", T, "Sanitisation check before publishing", "S8.3", area="docs",
          what="Run a denylist grep kept outside the repository over the tree and the full git "
               "history; review commit authors and emails.",

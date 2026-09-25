@@ -461,7 +461,7 @@
   "number": 122
  },
  "S8.1": {
-  "body_hash": "650d7910c56048833edc65fe686fda7165e951e5697370804a7beb985b1d5555",
+  "body_hash": "af157031d89396da3c4c474466f6f9e608c27475ec0855f8dc1da02367443c6e",
   "fields": {
    "Level": "Story",
    "Priority": "Must",
@@ -474,7 +474,7 @@
   "number": 125
  },
  "S8.2": {
-  "body_hash": "b356d54a499798a53b6f3fb0271aa2a46bf3f6942e3b70007d772870cf556270",
+  "body_hash": "319ba959b10843529f0e0a394a65de3ae239aaa2a7f5843e4648ee362de5128e",
   "fields": {
    "Level": "Story",
    "Priority": "Must",
@@ -514,7 +514,7 @@
   "number": 9
  },
  "aws-account": {
-  "body_hash": "2f76fc213c45a88c44fe59acdf4fa3f606ce0b0bb23b37b4514675d86bea11f7",
+  "body_hash": "9f2c5092d4048d94a260dd6b8bbcac57e3553b8d5ab1b2d262e9cb5cd3108ff3",
   "closed": true,
   "fields": {
    "Level": "Task",
@@ -544,7 +544,7 @@
   "number": 16
  },
  "build-lambda": {
-  "body_hash": "5328a1de7db10c12b494b48ca606fd616e0cf290077629edfe3acd45694b7e18",
+  "body_hash": "16d79e43e2d29267a8e096164870caf45c29bdced544104e04fc8e9546c72f63",
   "deps_done": [
    "exp-t-30",
    "scaffold"
@@ -1170,7 +1170,7 @@
   "number": 38
  },
  "go-public": {
-  "body_hash": "634e43cd5c88815e7218a1c22d7d1d220104a4bf2ce1f519a0e0a2c66e0190a4",
+  "body_hash": "e16a2df5e0db459116367179d193ae366ac5c184cfa503649ce68d46974dfb18",
   "deps_done": [
    "license",
    "name-check",
@@ -1371,7 +1371,7 @@
   "number": 98
  },
  "license": {
-  "body_hash": "a727a9cdb7d99723a77ecbec0086ed8a6b79128f2fdd3ed59605e5374f5ca0fc",
+  "body_hash": "917c055a60e79e3ee694ad513e6e03265be02d20719102768261f2e24bf72341",
   "deps_done": [
    "spec-review"
   ],
@@ -1455,11 +1455,12 @@
   "number": 108
  },
  "name-check": {
-  "body_hash": "5ea18e2a39ff8ad5849aa1a56278aa8c71f118a62ec2dc9b92f3543b98bb1662",
+  "body_hash": "81a33f4830df8fa17540a92aa8691c30bd68ba0a6f7ea587e43fe51af67ae500",
+  "closed": true,
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "Ready"
+   "Status": "Done"
   },
   "id": 5585164988,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yjDo",
@@ -1817,7 +1818,7 @@
   "number": 126
  },
  "rel-t-33": {
-  "body_hash": "03167cfa7b5d394b33615ad4804ad62bc601ffd2a429ffb756f277f558209ff1",
+  "body_hash": "9e1a8ccbc8f3245323e030a1349b11eea0c397d45aaf3d87f444b9c3f7aae97c",
   "deps_done": [
    "examples-main"
   ],
@@ -1833,7 +1834,7 @@
   "number": 130
  },
  "rel-t-35": {
-  "body_hash": "392b372425b4f9653547152c0ec09cf7df8675baceac92093092b07b58634b69",
+  "body_hash": "51c587a6f5fe0f44ec818e77e6e7a16776d2bc59c8a276780c3186bc0a1ed8be",
   "deps_done": [
    "examples-main"
   ],
@@ -1849,7 +1850,7 @@
   "number": 131
  },
  "rel-t-36": {
-  "body_hash": "15c8452ca2935991a5e01bbe609c98725b956bb84b1e8367eb29ae94390d18c4",
+  "body_hash": "cc3ac898bc2aea37cd05d8e6c43432060656c827f3393b961a414963ec350a9b",
   "deps_done": [
    "examples-main"
   ],
@@ -1865,7 +1866,7 @@
   "number": 132
  },
  "rel-t-39": {
-  "body_hash": "7e87b96aa58befe9bdd13b5a35fa49a4ccbe35dda68d1a81d2497cb62566bf4b",
+  "body_hash": "9a18c04abd421189c10a70b78ce2889b595d2d85a0ffba9f73a73296bd7e6060",
   "deps_done": [
    "examples-main"
   ],
@@ -1881,7 +1882,7 @@
   "number": 133
  },
  "rel-t-43": {
-  "body_hash": "c9c8f5e1ae1d58249eefdb318a7b327eca1e6180092464f4073190f58024a2d3",
+  "body_hash": "ab09a6360783ef1716059fa7bf6ad908aeb4d6a67c6330da1d4eacb132d22ad0",
   "deps_done": [
    "examples-main"
   ],
@@ -1897,7 +1898,7 @@
   "number": 134
  },
  "rel-t-50": {
-  "body_hash": "9ce6a41f1d45180dd77c32912ea3a1ed7be5aafb364f723961a6e047930f2297",
+  "body_hash": "d108e0c6ff8633a0e187d9c610593c3fcedc7653a7f2c46f8728be74fcc829f8",
   "deps_done": [
    "examples-main"
   ],
@@ -1913,7 +1914,7 @@
   "number": 135
  },
  "rel-t-51": {
-  "body_hash": "d189baf1260c6c5e97366b6bb617d3e8889bd50110094aa72d1ae850b33bc253",
+  "body_hash": "1491a2ad2a80236a5a850bee837395e0bd1b6e2c5c59a6d9cf2f41dedc15c02f",
   "deps_done": [
    "examples-main"
   ],
@@ -1929,7 +1930,7 @@
   "number": 136
  },
  "rel-t-52": {
-  "body_hash": "1e4f190d76120be637574369138b6f796c5525dfb588ffebac74971b91dd2b0d",
+  "body_hash": "be917b12eb6de43c553c9a5e613ce4e3c0455562522fb23c9dad7bd4a335cd56",
   "deps_done": [
    "examples-main"
   ],
@@ -1945,7 +1946,7 @@
   "number": 137
  },
  "rel-t-53": {
-  "body_hash": "34eb8df6eadf29158a33d7733b744f0dfab58101c49ce934ef58572df0446e91",
+  "body_hash": "da0d948b53f785b0e168e6e56206897983e7b96fd6773e26262c24dd131bd6c5",
   "deps_done": [
    "examples-main"
   ],
@@ -1961,7 +1962,7 @@
   "number": 138
  },
  "rel-t-55": {
-  "body_hash": "25ff7b2509284d3f8922269d12b66367e2abec71e4d3b78ff1baa31aecf72fa4",
+  "body_hash": "680249444c3fae0e76a5e70223a8d4db73da0bcd2f024312c4fbc5d240fdeb7b",
   "deps_done": [
    "examples-main"
   ],
@@ -2006,7 +2007,7 @@
   "number": 143
  },
  "scaffold": {
-  "body_hash": "47fe22b3c15df81f163463b1507698439e8712fbd472c1b10d3c3e2b352e16a7",
+  "body_hash": "cdf5d942fe6f846c502b2b4f68aa5f3b20faaa795f0164437c1fbf9fe8510df4",
   "deps_done": [
    "impl-plan"
   ],
@@ -2055,7 +2056,7 @@
   "number": 8
  },
  "spec-review": {
-  "body_hash": "7901c8cf840f8e888810464df9a6a5202ec3247b7c92a804577a5be1f2d4276d",
+  "body_hash": "01daf0e0e2c60bc2dd337e86227fad845701cbf0e1f6e7e01aaff524ed92f2f6",
   "fields": {
    "Level": "Task",
    "Priority": "Must",
@@ -2110,7 +2111,7 @@
   "number": 5
  },
  "test-plan": {
-  "body_hash": "685dd63a4663724498d4b74184d9f5cc574fb61dd507bf8644654a4607f37972",
+  "body_hash": "df1d059a5a29ebe333decd2fd0f9c1f516ec3b87e7238a1e5e5e915ed3be2910",
   "deps_done": [
    "spec-review"
   ],

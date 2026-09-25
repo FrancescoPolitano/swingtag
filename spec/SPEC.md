@@ -1,4 +1,4 @@
-# placard: specification
+# swingtag: specification
 
 **Status:** draft for review · **Version:** 0.2 · **Date:** 2026-09-25
 
@@ -14,7 +14,7 @@ Physical objects need a short, always current list of links: a restaurant table
 needs the menu, a plant in a nursery needs its care sheet, an artwork needs its
 audio guide. Today the owner of those objects either prints paper that goes stale,
 or adopts a hosted tool that owns the URL printed on every label, or builds a small
-website that someone has to maintain. placard lets the owner keep files in folders
+website that someone has to maintain. swingtag lets the owner keep files in folders
 on S3, which they already know how to fill, and turns each folder into a fast,
 static, themed mobile page with a stable URL and a QR code. Replacing a file updates
 the page within a minute; the printed code never changes.
@@ -102,7 +102,7 @@ Written down so that nobody builds them by accident.
 |---|---|---|
 | **Owner** | The person who keeps the content: restaurateur, nursery keeper, curator. Not technical | an S3 client on the source zone |
 | **Visitor** | Whoever scans the QR code on the object | a phone browser |
-| **Operator** | Who deploys and configures placard in an AWS account | Terraform, `make`, `theme.yaml` |
+| **Operator** | Who deploys and configures swingtag in an AWS account | Terraform, `make`, `theme.yaml` |
 | **Evaluator** | A stranger on GitHub deciding whether the project is worth anything | README, `make demo` |
 | **Contributor** | A developer changing the code | repository, tests, spec |
 | **Publisher** (system) | The Lambda function reacting to source changes | S3 events via SQS, direct invocation |
@@ -115,7 +115,7 @@ Priority: **M** must (v1), **S** should (v1 if cheap), **C** could (later).
 
 | ID | Story | Pri | Acceptance |
 |---|---|---|---|
-| US-1 | As an evaluator, I want to understand what placard does from the README in under a minute, so I can decide whether to try it | M | FR-50 |
+| US-1 | As an evaluator, I want to understand what swingtag does from the README in under a minute, so I can decide whether to try it | M | FR-50 |
 | US-2 | As an evaluator, I want one command to deploy an example into my AWS account and see the pages, so I can judge it on real infrastructure | M | FR-40, FR-41, FR-43 |
 | US-3 | As an evaluator, I want one command to remove everything the demo created, so trying it costs nothing afterwards | M | FR-42 |
 
@@ -487,8 +487,8 @@ public/{token}/{entry-slug}/{file-slug}.{ext}            copied resources
 ### 10.2 Repository structure
 
 ```
-placard/
-  src/placard/
+swingtag/
+  src/swingtag/
     __init__.py
     convention.py     names: separator, tokens, order prefix, NFC, ignore rules, slugs
     formats.py        FORMATS table, lookup(filename), parse_link(filename, body)
@@ -730,7 +730,7 @@ Variables:
 
 | Name | Type | Default | Notes |
 |---|---|---|---|
-| `name` | string | `placard` | prefix of every resource name |
+| `name` | string | `swingtag` | prefix of every resource name |
 | `theme_dir` | string | required | folder with `theme.yaml` and `assets/` |
 | `domain_name` | string | `""` | FR-44 |
 | `hosted_zone_name` | string | `""` | required when `domain_name` is set |
@@ -850,7 +850,7 @@ PENDING ones have an experiment task in the backlog that must close first.
 ## 13. Acceptance
 
 The system is done when every assumption in `spec/ASSUMPTIONS.md` is CONFIRMED
-(ORIGIN entries re-run on placard infrastructure), every test in `spec/TEST-PLAN.md` passes, `make verify`
+(ORIGIN entries re-run on swingtag infrastructure), every test in `spec/TEST-PLAN.md` passes, `make verify`
 returns 0 on each of the three examples, the README screenshots are taken from those
 deployments, and a manual check on an iOS phone plays the example audio and video.
 
@@ -859,5 +859,5 @@ deployments, and a manual check on an iOS phone plays the example audio and vide
 | ID | Question | Recommendation |
 |---|---|---|
 | Q-1 | License | MIT |
-| Q-2 | Final project name (`placard` is free on the owner's GitHub account; PyPI and wider search not done) | keep `placard`, check before going public |
+| Q-2 | ~~Final project name~~ | **Resolved 2026-09-25: `swingtag`** (the tag that hangs on a product). Chosen after a positioning study; `swingtag` was taken on GitHub (433-star iOS app), PyPI, npm and .com/.dev. `swingtag`: 0 GitHub repositories, free on PyPI and npm. No domain needed |
 | Q-3 | ~~Permission from the origin system's owner~~ | **Resolved 2026-09-25: not needed** (owner decision). The repository stays private until the owner decides to publish |
