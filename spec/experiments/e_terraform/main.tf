@@ -32,9 +32,9 @@ locals {
       : pow((parseint(substr(hex, 1 + 2 * i, 2), 16) / 255 + 0.055) / 1.055, 2.4)
     )
   ]) }
-  ratio_text  = (max(local.lum.text, local.lum.background) + 0.05) / (min(local.lum.text, local.lum.background) + 0.05)
+  ratio_text    = (max(local.lum.text, local.lum.background) + 0.05) / (min(local.lum.text, local.lum.background) + 0.05)
   ratio_primary = (max(local.lum.primary, local.lum.background) + 0.05) / (min(local.lum.primary, local.lum.background) + 0.05)
-  json        = jsonencode(local.theme)
+  json          = jsonencode(local.theme)
 }
 check "contrast" {
   assert {
