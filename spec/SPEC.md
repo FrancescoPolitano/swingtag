@@ -867,6 +867,6 @@ deployments, and a manual check on an iOS phone plays the example audio and vide
 
 | ID | Question | Recommendation |
 |---|---|---|
-| Q-1 | License | MIT |
+| Q-1 | ~~License~~ | **Resolved 2026-09-25: MIT** (owner decision) |
 | Q-2 | ~~Final project name~~ | **Resolved 2026-09-25: `swingtag`** (the tag that hangs on a product). Chosen after a positioning study; `swingtag` was taken on GitHub (433-star iOS app), PyPI, npm and .com/.dev. `swingtag`: 0 GitHub repositories, free on PyPI and npm. No domain needed |
 | Q-3 | ~~Permission from the origin system's owner~~ | **Resolved 2026-09-25: not needed** (owner decision). The repository stays private until the owner decides to publish |

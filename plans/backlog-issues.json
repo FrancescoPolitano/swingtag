@@ -1371,14 +1371,13 @@
   "number": 98
  },
  "license": {
-  "body_hash": "917c055a60e79e3ee694ad513e6e03265be02d20719102768261f2e24bf72341",
-  "deps_done": [
-   "spec-review"
-  ],
+  "body_hash": "bbe0dcf3820842671c3e6af602cf8236a3bb3c948f893604cbf57d571138aec4",
+  "closed": true,
+  "deps_done": [],
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "Backlog"
+   "Status": "Done"
   },
   "id": 5585160402,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yjDg",
@@ -2056,7 +2055,7 @@
   "number": 8
  },
  "spec-review": {
-  "body_hash": "01daf0e0e2c60bc2dd337e86227fad845701cbf0e1f6e7e01aaff524ed92f2f6",
+  "body_hash": "073a26df12c0de25607c58f597a85f5739575c56be5937191c7f71bbcba33527",
   "fields": {
    "Level": "Task",
    "Priority": "Must",
@@ -2111,7 +2110,7 @@
   "number": 5
  },
  "test-plan": {
-  "body_hash": "df1d059a5a29ebe333decd2fd0f9c1f516ec3b87e7238a1e5e5e915ed3be2910",
+  "body_hash": "14abb1f08edb48390e7ca4f6a70e029ece4c54a285aafa13b4020bbab3416827",
   "deps_done": [
    "spec-review"
   ],
