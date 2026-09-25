@@ -504,7 +504,7 @@ swingtag/
     theme.py          Theme dataclass, defaults, from_json(), contrast helper
     i18n.py           STRINGS[locale][key], format_date(dt, locale, tz)
     catalog.py        SourceObject, Button, Item, item_prefix(), build_item(), published_keys()
-    render.py         render_page(item, theme, updated_at), render_not_found(theme)
+    render.py         render_page(item, theme), render_not_found(theme)
     qr.py             qr_svg(url)
     settings.py       Settings.from_env()
     publish.py        Publisher: publish(prefix), republish_all(), publish_error_page()

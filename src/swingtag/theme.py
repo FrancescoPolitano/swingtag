@@ -77,7 +77,7 @@ def from_json(body: bytes) -> Theme:
         return DEFAULT_THEME
     try:
         data = json.loads(body)
-    except (ValueError, UnicodeDecodeError):
+    except (ValueError, UnicodeDecodeError, RecursionError):
         log.warning("theme: config/theme.json is not valid JSON, using the default theme")
         return DEFAULT_THEME
     if not isinstance(data, dict):
@@ -98,7 +98,11 @@ def from_json(body: bytes) -> Theme:
 
     known = STRINGS["en"].keys()
     strings = {}
-    for key, value in (data.get("strings") or {}).items():
+    raw_strings = data.get("strings") or {}
+    if not isinstance(raw_strings, dict):
+        log.warning("theme: strings is not an object, ignored")
+        raw_strings = {}
+    for key, value in raw_strings.items():
         if key in known and isinstance(value, str):
             strings[key] = value
         else:

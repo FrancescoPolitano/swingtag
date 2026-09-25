@@ -94,3 +94,17 @@ def test_link_non_ascii_url():
     """Review Focus 5."""
     url = "https://bücher.example/ü"
     assert f.parse_link("x.url", f"[InternetShortcut]\nURL={url}\n".encode()) == url
+
+
+def test_link_invalid_ipv6_is_rejected_not_raised():
+    """Final review, Important 1: urlsplit raises ValueError on some malformed URLs."""
+    assert f.parse_link("x.url", b"[InternetShortcut]\nURL=http://[::1\n") is None
+
+
+def test_link_nfkc_netloc_is_rejected_not_raised():
+    assert f.parse_link("x.url", "[InternetShortcut]\nURL=https://ex℀ample.com/\n".encode()) is None
+
+
+def test_link_without_hostname_rejected():
+    for url in ["https://:80/", "https://@/"]:
+        assert f.parse_link("x.url", f"[InternetShortcut]\nURL={url}\n".encode()) is None, url

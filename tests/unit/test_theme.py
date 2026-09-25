@@ -73,3 +73,16 @@ def test_unknown_string_key_dropped(caplog):
     with caplog.at_level(logging.WARNING):
         theme = t.from_json(body({**RESTAURANT, "strings": {"updatd": "x"}}))
     assert "updatd" not in theme.strings
+
+
+def test_strings_not_an_object_falls_back(caplog):
+    """Final review, Important 2."""
+    for bad in (["a"], "abc"):
+        with caplog.at_level(logging.WARNING):
+            theme = t.from_json(body({**RESTAURANT, "strings": bad}))
+        assert dict(theme.strings) == {}
+        assert theme.locale == "it"
+
+
+def test_deeply_nested_body_falls_back():
+    assert t.from_json(b"[" * 100000) == t.DEFAULT_THEME

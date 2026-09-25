@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: swingtag
+Version: 0.1.0
+Summary: A linktree for physical things: a folder on S3 becomes a permanent page behind a printed QR code
+License-Expression: MIT
+Requires-Python: >=3.12
+License-File: LICENSE
+Requires-Dist: qrcode==8.2
+Provides-Extra: dev
+Requires-Dist: pytest>=8; extra == "dev"
+Requires-Dist: opencv-python-headless>=4.9; extra == "dev"
+Dynamic: license-file

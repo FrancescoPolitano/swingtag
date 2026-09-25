@@ -163,3 +163,11 @@ def test_updated_at_max_including_links():
     link = obj("50 Book/book.url", day=5)
     item = build(obj("10 A/x.pdf", day=1), link, links={link.key: url_body(BOOK)})
     assert item.updated_at == datetime(2026, 9, 5, tzinfo=timezone.utc)
+
+
+def test_malformed_link_is_anomaly_and_keeps_other_buttons():
+    """Final review, Important 1: one bad link file must not stop the item."""
+    link = obj("50 Book/book.url")
+    item = build(obj("10 A/x.pdf"), link, links={link.key: url_body("http://[::1")})
+    assert [b.filename for b in item.buttons] == ["x.pdf"]
+    assert reasons(item) == ["invalid link"]

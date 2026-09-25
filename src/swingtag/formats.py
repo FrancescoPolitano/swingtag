@@ -73,7 +73,11 @@ def parse_link(filename: str, body: bytes) -> str | None:
     if not isinstance(url, str):
         return None
     url = url.strip()
-    parts = urlsplit(url)
-    if parts.scheme.lower() not in _ALLOWED_SCHEMES or not parts.netloc:
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname
+    except ValueError:  # e.g. "http://[::1" or a netloc invalid under NFKC
+        return None
+    if parts.scheme.lower() not in _ALLOWED_SCHEMES or not host:
         return None
     return url
