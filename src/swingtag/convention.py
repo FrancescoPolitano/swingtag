@@ -6,6 +6,8 @@ strings: nothing in this module knows about AWS.
 
 from __future__ import annotations
 
+import hashlib
+import hmac
 import re
 import unicodedata
 
@@ -58,3 +60,46 @@ def is_ignored(name: str) -> bool:
     if clean.startswith((".", "_")):
         return True
     return clean.casefold() in _SYSTEM_NAMES
+
+
+# Token alphabet: lowercase letters and digits without l, o, 0, 1, which get
+# confused when a code is read aloud or printed small. 32 symbols x 12 = 60 bits.
+TOKEN_ALPHABET = "abcdefghijkmnpqrstuvwxyz23456789"
+TOKEN_LENGTH = 12
+_TOKEN_RE = re.compile(rf"^[{TOKEN_ALPHABET}]{{{TOKEN_LENGTH}}}$")
+
+
+def is_token(value: str) -> bool:
+    return bool(_TOKEN_RE.match(value))
+
+
+def token_for(collection: str, label: str, secret: str) -> str:
+    """Token of an item, derived from its names with a secret key.
+
+    Deterministic on purpose: two concurrent runs that find the same untokenised
+    folder compute the same value and converge on one address instead of creating
+    twin items. Unpredictable without the key. 256 is a multiple of 32, so reducing
+    each byte modulo 32 is uniform.
+    """
+    material = f"{normalize(collection)}\x00{normalize(label)}".encode("utf-8")
+    digest = hmac.new(secret.encode("utf-8"), material, hashlib.sha256).digest()
+    return "".join(TOKEN_ALPHABET[byte % len(TOKEN_ALPHABET)] for byte in digest[:TOKEN_LENGTH])
+
+
+def split_item_name(folder: str) -> tuple[str, str | None]:
+    """Split an item folder name into (label, token); token is None when absent.
+
+    The last separator wins, so a label may itself contain the separator. A tail
+    that is not a valid token is part of the label.
+    """
+    name = normalize(folder).strip()
+    # Stripping turns " · token" (empty label) into "· token": restore the leading space.
+    probe = f" {name}" if name.startswith(SEPARATOR.lstrip()) else name
+    label, sep, candidate = probe.rpartition(SEPARATOR)
+    if sep and is_token(candidate.strip()):
+        return label.strip(), candidate.strip()
+    return name, None
+
+
+def with_token(label: str, token: str) -> str:
+    return f"{label.strip()}{SEPARATOR}{token}"

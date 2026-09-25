@@ -73,3 +73,56 @@ def test_not_ignored_regular():
 def test_separator_is_middle_dot():
     assert c.SEPARATOR == " · "
     assert unicodedata.normalize("NFC", c.SEPARATOR) == c.SEPARATOR
+
+
+SECRET = "test-secret"
+
+
+def test_token_alphabet_and_length():
+    token = c.token_for("C", "L", SECRET)
+    assert len(token) == 12
+    assert set(token) <= set(c.TOKEN_ALPHABET)
+    assert not set(token) & set("lo01")
+
+
+def test_token_deterministic():
+    assert c.token_for("Vivaio", "Olivo", SECRET) == c.token_for("Vivaio", "Olivo", SECRET)
+
+
+def test_token_key_sensitive():
+    assert c.token_for("Vivaio", "Olivo", "a") != c.token_for("Vivaio", "Olivo", "b")
+
+
+def test_token_nfc_insensitive():
+    nfd = unicodedata.normalize("NFD", "Città")
+    assert c.token_for(nfd, "Olivo", SECRET) == c.token_for("Città", "Olivo", SECRET)
+
+
+def test_token_boundary():
+    assert c.token_for("ab", "c", SECRET) != c.token_for("a", "bc", SECRET)
+
+
+def test_split_item_valid_token():
+    assert c.split_item_name("Olivo · 3xk9m2p7qhv4") == ("Olivo", "3xk9m2p7qhv4")
+
+
+def test_split_item_last_separator():
+    assert c.split_item_name("Olivo · north · 3xk9m2p7qhv4") == ("Olivo · north", "3xk9m2p7qhv4")
+
+
+def test_split_item_invalid_tail():
+    assert c.split_item_name("Olive · north terrace") == ("Olive · north terrace", None)
+
+
+def test_split_item_bad_alphabet():
+    assert c.split_item_name("Olivo · 3xk9m2p7qhv0") == ("Olivo · 3xk9m2p7qhv0", None)
+
+
+def test_with_token_roundtrip():
+    token = c.token_for("Vivaio", "Olivo", SECRET)
+    assert c.split_item_name(c.with_token("Olivo", token)) == ("Olivo", token)
+
+
+def test_empty_label_split():
+    """Review Focus 2: a folder that is only separator and token."""
+    assert c.split_item_name(" · 3xk9m2p7qhv4") == ("", "3xk9m2p7qhv4")
