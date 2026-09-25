@@ -1,6 +1,6 @@
 # placard: specification
 
-**Status:** draft for review · **Version:** 0.1 · **Date:** 2026-09-25
+**Status:** draft for review · **Version:** 0.2 · **Date:** 2026-09-25
 
 A linktree for physical things. A folder structure on Amazon S3 becomes a set of
 mobile pages, one per physical object, each reachable from a QR code printed on
@@ -327,9 +327,14 @@ buttons.
 **FR-31 Layout.** Top to bottom: notice band (if set); header with logo (if set) and
 header text; item label as `h1`; collection name as subtitle only when `header` is set
 (otherwise the collection is already the header); the buttons; the footer text (if
-set); the "updated" line. Touch targets at least 56 px high; WCAG AA contrast is the
-operator's responsibility and is checked by a warning in validation (FR-12) when
-`text` on `background` or white on `primary` falls below 4.5:1.
+set); the "updated" line. Touch targets at least 56 px high. `primary` colours the
+icons, the focus ring and the notice band tint; every secondary tone (muted text,
+lines, card background, notice background) is derived with `color-mix()` from `text`,
+`background` and `primary` only, never from fixed white or black, so that dark
+palettes stay coherent (T-14). Contrast is the operator's responsibility; `plan`
+emits a warning (a `check` block, not an error) when `text` on `background` is below
+4.5:1 or `primary` on `background` is below 3:1, and the same for `colors_dark` (T-09,
+T-10).
 
 **FR-32 Buttons.** Each button shows the kind icon (inline SVG with the `kind_*`
 accessible name), the label and the optional context. File buttons link to the
@@ -350,6 +355,12 @@ existed. Access-denied responses from the origin are also mapped to this page wi
 the content type of FR-7 and the original file name (ASCII-transliterated) in
 `Content-Disposition`, so the phone opens them in its native viewer or player.
 
+**FR-38 Public paths and slugs.** Entry and file slugs are computed by: applying the
+transliteration table `ß→ss ẞ→SS æ→ae Æ→AE œ→oe Œ→OE ø→o Ø→O đ→d Đ→D ł→l Ł→L þ→th Þ→Th`,
+then NFKD decomposition, dropping non-ASCII code points, case folding, replacing every
+run of characters outside `[a-z0-9]` with `-`, trimming `-`. An empty result becomes
+`entry` or `file`. NFKD alone drops letters such as `ß` (T-05), hence the table.
+
 **FR-37 QR code.** Each item publishes `/{token}/qr.svg`, a vector QR code of the item
 URL with error correction level Q.
 
@@ -357,7 +368,8 @@ URL with error correction level Q.
 
 **FR-40 One-command demo.** `make demo EXAMPLE=restaurant|nursery|exhibition` runs the
 unit tests, builds the Lambda package and applies `examples/{name}` with Terraform.
-Prerequisites: Terraform 1.6+, Python 3.12, AWS credentials in the environment.
+Prerequisites: Terraform 1.9+ (cross-variable validation, T-21), Python 3.12, AWS
+credentials in the environment.
 
 **FR-41 Populated bucket.** The apply uploads the example's `content/` into
 `source/` and its theme, and ends with every page already published (the
@@ -772,7 +784,8 @@ module call with `force_destroy = true`, `aws_s3_object` for each file of
 | Collection | Osteria Quattro Mestoli | Vivaio Radici Lente | Tides of Light |
 | Items | 1: `Menu` | 6 plants (for example `Olivo Leccino`, `Glicine viola`, `Limone Femminello`, `Rosa canina`, `Lavanda angustifolia`, `Acero giapponese`) | 6 works |
 | Entries per item | `10 Pranzo` (pdf), `20 Cena` (pdf), `30 Vini` (pdf), `40 Allergeni` (pdf), `50 Prenota` (url) | `10 Scheda` (pdf), `20 Foto` (jpg), `30 Storia` (pdf), `40 Come potarla` (mp4), `50 Acquista` (url) | `10 The work` (pdf), `20 The artist` (pdf), `30 Listen` (m4a), `40 Watch` (mp4), `50 Read more` (webloc) |
-| Palette (primary / background / text) | `#8a2d1c` / `#fbf7f2` / `#1f1b16` | `#3d6b4f` / `#f4f1ea` / `#1d241f` | `#c9a227` / `#fbf8f1` / `#14213d` |
+| Palette (primary / background / text) | `#8a2d1c` / `#fbf7f2` / `#1f1b16` | `#3d6b4f` / `#f4f1ea` / `#1d241f` | `#8c6d0f` / `#fbf8f1` / `#14213d` |
+| Contrast text/bg, primary/bg (T-22) | 16.05, 7.96 | 14.06, 5.45 | 15.06, 4.59 |
 | Logo | monogram with a fork | leaf | frame |
 | locale | it | it | en |
 
@@ -830,9 +843,14 @@ See `spec/spikes/README.md`: S1 media CSP, S2 link parsing, S3 theme validation 
 Terraform, S4 range requests (deferred to live verification). The origin system is the
 behavioural reference (assumption A-13).
 
+Every technical assumption of this spec is tracked in `spec/ASSUMPTIONS.md` with the
+experiment that confirms it. Implementation may rely only on CONFIRMED assumptions;
+PENDING ones have an experiment task in the backlog that must close first.
+
 ## 13. Acceptance
 
-The system is done when every test in `spec/TEST-PLAN.md` passes, `make verify`
+The system is done when every assumption in `spec/ASSUMPTIONS.md` is CONFIRMED
+(ORIGIN entries re-run on placard infrastructure), every test in `spec/TEST-PLAN.md` passes, `make verify`
 returns 0 on each of the three examples, the README screenshots are taken from those
 deployments, and a manual check on an iOS phone plays the example audio and video.
 

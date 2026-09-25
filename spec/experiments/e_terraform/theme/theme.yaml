@@ -1,0 +1,7 @@
+locale: it
+logo: logo.svg
+header: "Osteria Quattro Mestoli · Città"
+colors:
+  primary: "#c9a227"
+  background: "#fbf8f1"
+  text: "#14213d"
