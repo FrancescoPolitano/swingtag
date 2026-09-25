@@ -74,7 +74,7 @@ BACKLOG = [
          done=["every FR and EC is covered by at least one named test (spec/check_coverage.py)",
                "no test uses vague wording (no 'gracefully', 'correctly')",
                "ambiguities AMB-1..AMB-5 resolved by the owner", "owner approval"],
-         deps=["spec-review"], status="In review"),
+         deps=["spec-review"], closed=True),
     item("impl-plan", T, "Write the implementation plan in plans/ (phase 5)", "S1.2",
          spec="spec/README.md phase 5",
          what="File by file, function by function, referencing the backlog task keys.",

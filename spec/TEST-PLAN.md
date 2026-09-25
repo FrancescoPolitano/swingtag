@@ -1,6 +1,6 @@
 # swingtag: test plan
 
-**Status:** draft for review · **Version:** 0.1 · **Date:** 2026-09-25 · **Spec:** SPEC 1.0
+**Status:** approved (2026-09-25) · **Version:** 1.0 · **Spec:** SPEC 1.1
 
 Phase 4 of the process: the tests are listed, named and specified with input and expected
 output before the implementation plan. This list is the definition of done. A test that
@@ -197,7 +197,7 @@ Fixture: an item with ten buttons, two per kind, labels of 55 characters with co
 | U-HDL-05 | partial_failure | two items, the stub makes one raise | `batchItemFailures` lists only the failing item's message ids | FR-26 |
 | U-HDL-06 | direct_republish | event `{"action":"republish_all"}` | error page published, `republish_all` called, returns `{"items": n}` | 10.5 |
 | U-HDL-07 | logging_level | root logger with an existing handler, `LOG_LEVEL=INFO` | root level INFO after import | trap `logging.basicConfig` |
-| U-HDL-08 | out_of_convention_key | key `source/readme.pdf` | no publish, WARNING logged | FR-9 |
+| U-HDL-08 | out_of_convention_key | key `source/readme.pdf` | no publish, WARNING with reason `key outside convention` | FR-9 |
 
 ### 2.8 Repository-level tests
 
@@ -292,15 +292,15 @@ every 5 s, failing at 60 s.
 ## 7. Ambiguities found while writing this plan
 
 Following the method (restate, list assumptions, flag ambiguities), these are the points
-where SPEC 1.0 allowed more than one reading. Each has a proposed resolution; none is applied
-to the spec until the owner confirms.
+where SPEC 1.0 allowed more than one reading. All five resolutions were confirmed by the owner
+on 2026-09-25 and written into SPEC 1.1.
 
 | ID | Where | Ambiguity | Proposed resolution |
 |---|---|---|---|
 | AMB-1 | FR-20..FR-22 "within one minute" | measured from what to what | from the S3 `PutObject`/`DeleteObject` response to the first CloudFront response reflecting it (L-04..L-06 measure exactly this) |
 | AMB-2 | FR-31 "WCAG AA contrast … warning" vs examples | whether the examples may ship with a warning | examples must produce no contrast warning (U-REPO-05, TF-11 uses a deliberately bad theme) |
 | AMB-3 | EC-7 duplicate token, "lexical key order" | byte order or casefold order | byte order of the NFC-normalised prefix, as Python `sorted()` on `str` |
-| AMB-4 | FR-9 anomaly wording | exact log strings are asserted by tests | the reasons are the fixed strings used in U-CAT-06..08, 15, 17 and U-PUB-19: `file in item root`, `deeper than entry level`, `format not accepted`, `too large for single copy`, `invalid link`, `duplicate token` |
+| AMB-4 | FR-9 anomaly wording | exact log strings are asserted by tests | the reasons are the fixed strings used in U-CAT-06..08, 15, 17, U-PUB-19 and U-HDL-08: `file in item root`, `deeper than entry level`, `format not accepted`, `too large for single copy`, `invalid link`, `duplicate token`, `key outside convention` |
 | AMB-5 | FR-36 ASCII filename fallback | fallback name when transliteration leaves nothing | `file{ext}` (e.g. `file.pdf`), as in U-PUB-08 |
 
 ## 8. Coverage

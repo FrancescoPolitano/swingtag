@@ -1196,7 +1196,7 @@
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "Backlog"
+   "Status": "Ready"
   },
   "id": 5585121639,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yfJI",
@@ -2111,14 +2111,15 @@
   "number": 5
  },
  "test-plan": {
-  "body_hash": "965ddf50bd912d3a388ebe84f2049098c34645a7baa10a8c7cce76f26d1397fe",
+  "body_hash": "aebe7020b99b5034b503114acc5ba5a00af836d99a23a40c6bf1d4bb7ff8677e",
+  "closed": true,
   "deps_done": [
    "spec-review"
   ],
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "In review"
+   "Status": "Done"
   },
   "id": 5585121329,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yfJE",

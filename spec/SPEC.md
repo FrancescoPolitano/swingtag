@@ -1,6 +1,6 @@
 # swingtag: specification
 
-**Status:** approved (2026-09-25) · **Version:** 1.0 · **Date:** 2026-09-25
+**Status:** approved (2026-09-25) · **Version:** 1.1 · **Date:** 2026-09-25
 
 A linktree for physical things. A folder structure on Amazon S3 becomes a set of
 mobile pages, one per physical object, each reachable from a QR code printed on
@@ -227,7 +227,10 @@ anomaly and produces no button.
 | Item with no valid resource | no page; an existing publication is removed | yes (info) |
 | Key outside `source/{collection}/{item}/` depth | ignored | yes |
 
-Anomalies are logged as `anomaly on {item prefix}: {reason}: {relative path}`.
+Anomalies are logged at WARNING as `anomaly on {item prefix}: {reason}: {relative path}`, where
+`{reason}` is exactly one of: `file in item root`, `deeper than entry level`,
+`format not accepted`, `too large for single copy`, `invalid link`, `duplicate token`,
+`key outside convention` (AMB-4).
 
 ### 8.2 Christening and tokens
 
@@ -289,6 +292,10 @@ are recompiled with the new theme. Without a theme in the config zone the publis
 uses a built-in neutral theme (light and dark, locale `en`).
 
 ### 8.4 Publishing lifecycle
+
+**Timing definition (applies to FR-20, FR-21, FR-22).** "Within one minute" is measured from
+the S3 `PutObject` or `DeleteObject` response to the first CloudFront response that reflects
+the change (AMB-1).
 
 **FR-20 First publication.** Within one minute of the upload of the first valid
 resource into a new item folder, the item is christened and its page, QR code and
@@ -352,8 +359,10 @@ existed. Access-denied responses from the origin are also mapped to this page wi
 `404`.
 
 **FR-36 Direct opening.** Documents, images, audio and video are served `inline` with
-the content type of FR-7 and the original file name (ASCII-transliterated) in
-`Content-Disposition`, so the phone opens them in its native viewer or player.
+the content type of FR-7 and the original file name (ASCII-transliterated, quotes and
+backslashes removed) in `Content-Disposition`, so the phone opens them in its native viewer
+or player. When nothing remains after transliteration, the name is `file{ext}`, for example
+`file.pdf` (AMB-5).
 
 **FR-38 Public paths and slugs.** Entry and file slugs are computed by: applying the
 transliteration table `ß→ss ẞ→SS æ→ae Æ→AE œ→oe Œ→OE ø→o Ø→O đ→d Đ→D ł→l Ł→L þ→th Þ→Th`,
@@ -419,7 +428,7 @@ teardown; license; a disclaimer that example businesses are fictional.
 | EC-4 | Folder renamed keeping the token: for a moment two prefixes share it | the event of the empty prefix finds the owner of the token and republishes from there; the publication is not removed |
 | EC-5 | Item moved to another collection keeping the token | same as EC-4; the owner search looks at the event's collection first, then all others |
 | EC-6 | Owner edits or deletes the token part of the folder name | the item is christened again on a new token (derived from the label); the old address stops answering. Documented in the README as the one unrecoverable action |
-| EC-7 | Two folders carry the same valid token (copy-paste of a folder) | the first in lexical key order owns the token; the other is logged as anomaly `duplicate token` and not published |
+| EC-7 | Two folders carry the same valid token (copy-paste of a folder) | the first in byte order of the NFC-normalised prefix (Python `sorted()` on `str`, AMB-3) owns the token; the other is logged as anomaly `duplicate token` and not published |
 | EC-8 | Same name in NFC and NFD | one button (FR-6) |
 | EC-9 | Two entries whose slugs collide (`Care/1`, `Care 1`) | second slug gets a numeric suffix (`care-1`, `care-1-2`); uniqueness is per level |
 | EC-10 | Name that transliterates to nothing (`★★★`) | slug `entry` (entries) or `file` (files), then the collision rule |
@@ -795,6 +804,8 @@ module call with `force_destroy = true`, `aws_s3_object` for each file of
 | Entries per item | `10 Pranzo` (pdf), `20 Cena` (pdf), `30 Vini` (pdf), `40 Allergeni` (pdf), `50 Prenota` (url) | `10 Scheda` (pdf), `20 Foto` (jpg), `30 Storia` (pdf), `40 Come potarla` (mp4), `50 Acquista` (url) | `10 The work` (pdf), `20 The artist` (pdf), `30 Listen` (m4a), `40 Watch` (mp4), `50 Read more` (webloc) |
 | Palette (primary / background / text) | `#8a2d1c` / `#fbf7f2` / `#1f1b16` | `#3d6b4f` / `#f4f1ea` / `#1d241f` | `#8c6d0f` / `#fbf8f1` / `#14213d` |
 | Contrast text/bg, primary/bg (T-22) | 16.05, 7.96 | 14.06, 5.45 | 15.06, 4.59 |
+
+The examples must produce no contrast warning at plan time (AMB-2).
 | Logo | monogram with a fork | leaf | frame |
 | locale | it | it | en |
 
