@@ -1,0 +1,15 @@
+# Terraform state and variables: never commit (state holds the token secret)
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+# Build output
+build/
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# OS
+.DS_Store
