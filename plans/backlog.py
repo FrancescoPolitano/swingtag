@@ -15,16 +15,17 @@ are created from this file by `plans/create_backlog.py`. Each entry:
     deps      keys this item is blocked by
     closed    True when already done (kept for traceability)
     reason    completed | not_planned, the close reason on GitHub
+    status    optional board status override for open items (e.g. "In review")
 """
 
 E, S, T, X = "epic", "story", "task", "experiment"
 
 
 def item(key, level, title, parent=None, area="process", priority="must", spec="",
-         what="", done=(), deps=(), closed=False, reason="completed"):
+         what="", done=(), deps=(), closed=False, reason="completed", status=None):
     return dict(key=key, level=level, title=title, parent=parent, area=area,
                 priority=priority, spec=spec, what=what, done=list(done),
-                deps=list(deps), closed=closed, reason=reason)
+                deps=list(deps), closed=closed, reason=reason, status=status)
 
 
 BACKLOG = [
@@ -66,13 +67,14 @@ BACKLOG = [
          closed=True),
     item("spec-review", T, "Owner review and approval of the spec", "S1.2",
          spec="SPEC 14", what="Q-1 MIT, Q-2 swingtag, Q-3 no permission needed: all resolved on 2026-09-25.",
-         done=["review comments applied", "SPEC status: approved"]),
+         done=["review comments applied", "SPEC status: approved"], closed=True),
     item("test-plan", T, "Write spec/TEST-PLAN.md (phase 4)", "S1.2", spec="spec/README.md phase 4",
          what="Every test with name, input, expected output; unit, Terraform, live and device "
               "levels; mapped to FR/EC/US.",
-         done=["every FR and EC is covered by at least one named test", "no test uses vague "
-               "wording (no 'gracefully', 'correctly')", "owner approval"],
-         deps=["spec-review"]),
+         done=["every FR and EC is covered by at least one named test (spec/check_coverage.py)",
+               "no test uses vague wording (no 'gracefully', 'correctly')",
+               "ambiguities AMB-1..AMB-5 resolved by the owner", "owner approval"],
+         deps=["spec-review"], status="In review"),
     item("impl-plan", T, "Write the implementation plan in plans/ (phase 5)", "S1.2",
          spec="spec/README.md phase 5",
          what="File by file, function by function, referencing the backlog task keys.",

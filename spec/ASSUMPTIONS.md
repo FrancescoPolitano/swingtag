@@ -44,6 +44,8 @@ experiments need `qrcode==8.2` (and `opencv-python-headless` for T-13 only).
 | T-21 | A variable validation can reference another variable (domain requires zone) | EC-32, 10.9 | `experiments/e_terraform/` | CONFIRMED, requires Terraform ≥ 1.9 | "hosted_zone_name is required when domain_name is set." Spec prerequisite raised from 1.6 to 1.9 |
 | T-22 | The example palettes meet contrast (text/background ≥ 4.5, primary/background ≥ 3 for icons) | 10.11 | Python computation, same formula as T-10 | REFUTED → FIXED | exhibition gold `#c9a227` = 2.28:1. Replaced with `#8c6d0f` = 4.59:1. Restaurant 7.96, nursery 5.45 |
 | T-23 | Placeholder media fit the size budget (< 100 KB each) | 10.11 | `say` + ffmpeg, spike of 2026-09-25 | CONFIRMED | M4A 9 s = 79,503 B; MP4 720×1280 8 s = 22,440 B; JPEG 400×300 = 937 B |
+| T-24 | `terraform test` with `mock_provider "aws"` exercises variable validations, resource preconditions, `count` conditions and apply-mode assertions without credentials | TEST-PLAN (TF level) | `experiments/e_tftest/` | CONFIRMED | 4/4 runs pass, including two `expect_failures` (validation and precondition), Terraform 1.13.3 |
+| T-25 | The ES5 CloudFront Function file can be unit-tested in Node as is (loaded in a `vm` context, `handler()` called), with no exports added | TEST-PLAN (rewrite tests), 10.7 | `experiments/e_rewrite/test_rewrite.mjs` | CONFIRMED | 6/6 cases on Node v24.1.0, `/_assets/logo.svg` untouched. Runtime parity with CloudFront remains T-40 |
 
 ## AWS assumptions (need a deployment)
 

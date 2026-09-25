@@ -215,7 +215,7 @@ def main() -> None:
                                 p=project_id, c=s["node_id"])["addProjectV2ItemById"]["item"]["id"]
             save_state(state)
         open_deps = [d for d in e["deps"] if not by_key[d]["closed"]]
-        status = ("Done" if e["closed"] else
+        status = ("Done" if e["closed"] else e["status"] if e.get("status") else
                   "Ready" if e["level"] in ("task", "experiment") and not open_deps else "Backlog")
         values = {"Status": status, "Level": e["level"].capitalize(),
                   "Priority": e["priority"].capitalize()}

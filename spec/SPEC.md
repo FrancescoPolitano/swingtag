@@ -1,6 +1,6 @@
 # swingtag: specification
 
-**Status:** draft for review · **Version:** 0.2 · **Date:** 2026-09-25
+**Status:** approved (2026-09-25) · **Version:** 1.0 · **Date:** 2026-09-25
 
 A linktree for physical things. A folder structure on Amazon S3 becomes a set of
 mobile pages, one per physical object, each reachable from a QR code printed on

@@ -2055,11 +2055,12 @@
   "number": 8
  },
  "spec-review": {
-  "body_hash": "073a26df12c0de25607c58f597a85f5739575c56be5937191c7f71bbcba33527",
+  "body_hash": "2c6e8e9d7573dc305e970e902c222a7b26535086f7484841a52f72f628f9f9aa",
+  "closed": true,
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "Ready"
+   "Status": "Done"
   },
   "id": 5585120946,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yfI4",
@@ -2110,14 +2111,14 @@
   "number": 5
  },
  "test-plan": {
-  "body_hash": "14abb1f08edb48390e7ca4f6a70e029ece4c54a285aafa13b4020bbab3416827",
+  "body_hash": "965ddf50bd912d3a388ebe84f2049098c34645a7baa10a8c7cce76f26d1397fe",
   "deps_done": [
    "spec-review"
   ],
   "fields": {
    "Level": "Task",
    "Priority": "Must",
-   "Status": "Backlog"
+   "Status": "In review"
   },
   "id": 5585121329,
   "item": "PVTI_lAHOAZFWL84Bkrowzg8yfJE",
