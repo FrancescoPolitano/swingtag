@@ -47,40 +47,40 @@ experiments need `qrcode==8.2` (and `opencv-python-headless` for T-13 only).
 
 ## AWS assumptions (need a deployment)
 
-| ID | Assumption | Spec | Status | Prior evidence |
-|---|---|---|---|---|
-| T-30 | A Lambda package built on macOS (`pip --only-binary`) imports `qrcode` on python3.12 arm64 and writes SVG | A-6 | PENDING-AWS | ORIGIN (same packaging in the origin system) |
-| T-31 | The python3.12 Lambda runtime ships the IANA tz database (`ZoneInfo("Europe/Rome")` works) | FR-27, FR-33 | PENDING-AWS | origin used `Europe/Rome` successfully (ORIGIN) |
-| T-32 | Single-part upload ETag = MD5 of the body, and `CopyObject` with `MetadataDirective=REPLACE` under SSE-S3 keeps the same ETag | 10.6 steps 7-8, FR-23 | PENDING-AWS | ORIGIN for copy without the new content types |
-| T-33 | S3 → SQS notifications filtered on `source/` carry URL-encoded keys (`+`, `%C2%B7`) and an `s3:TestEvent` at setup | 10.5, EC-23, EC-25 | ORIGIN | origin verification |
-| T-34 | Writes to `public/` and `config/` produce no queue messages | EC-27 | PENDING-AWS | ORIGIN for `public/`; `config/` is new |
-| T-35 | SQS event source with `maximum_concurrency = 2` and `ReportBatchItemFailures` retries only the failed message ids; reserved concurrency throttles pollers | FR-26, 11 | ORIGIN | 43 throttles observed with reserved concurrency 1 |
-| T-36 | A 10-file upload of one item produces a single publication thanks to the 30 s window and prefix dedup | EC-1 | ORIGIN | caos run phase 1 |
-| T-37 | Upload to visible page change takes ≤ 60 s | FR-20, FR-21, FR-22 | PENDING-AWS | ORIGIN ("within a minute" checks passed) |
-| T-38 | CloudFront with OAC and `origin_path=/public` cannot reach `source/` or `config/` | 10.7, 10.8 | PENDING-AWS | ORIGIN for `source/` |
-| T-39 | Origin 403 and 404 both surface as the themed `/404.html` with status 404 | FR-35 | ORIGIN | origin verification |
-| T-40 | The ES5 CloudFront Function rewrites as tabled and leaves `/_assets/*` untouched | 10.7, EC-33 | PENDING-AWS | ORIGIN for tokens; `/_assets/` is new |
-| T-41 | The response headers policy, CSP with `media-src` included, is applied to pages, media and error responses | 10.7 | PENDING-AWS | none for media |
-| T-42 | CloudFront with `CachingOptimized` answers `206` with `Accept-Ranges: bytes` on `.mp4` range requests | FR-47 | PENDING-AWS | S4 deferred |
-| T-43 | Invalidating `/{token}*` refreshes the page and every resource of the item | 10.6 step 11 | ORIGIN | origin verification |
-| T-44 | `aws_lambda_invocation` runs at create and re-runs only when its `triggers` (theme fingerprint, package hash) change | FR-15, FR-41 | PENDING-AWS | none |
-| T-45 | Example objects uploaded with `depends_on` on the module all produce notifications (none lost while notifications are being configured) | FR-41 | PENDING-AWS | none; mitigated by the post-upload republish-all |
-| T-46 | Without `domain_name` the distribution serves HTTPS on the default certificate; the module plans and applies with the `aws.us_east_1` alias passed and zero ACM resources | FR-44 | PENDING-AWS | none |
-| T-47 | `force_destroy = true` deletes a versioned bucket with noncurrent versions | FR-42 | PENDING-AWS | origin needed manual version cleanup (hence the variable) |
-| T-48 | Republish-all lists item prefixes with delimiter listings on names containing ` · ` and its synthetic SQS messages are processed like S3 ones | 10.5 | PENDING-AWS | none |
-| T-49 | `s3:ListBucket` restricted with `s3:prefix` conditions allows the publisher's delimiter listings of `source/` and `public/` | 10.8 | PENDING-AWS | ORIGIN for listing under both prefixes |
-| T-50 | `uploader_principal_arns` can write only under `source/` | FR-46 | ORIGIN | origin policy |
-| T-51 | Conservative pruning prevents overlapping runs from deleting fresh writes | EC-28 | ORIGIN | caos run |
-| T-52 | Derived tokens make concurrent christening converge on one item | EC-2 | ORIGIN | 9 orphan tokens before the fix, 0 after |
-| T-53 | Renaming or moving an item while keeping the token keeps the URL | FR-24, EC-4, EC-5 | ORIGIN | caos phase 3 |
-| T-54 | A message in the dead-letter queue raises the CloudWatch alarm | FR-26 | PENDING-AWS | none |
-| T-55 | `make demo` completes on a fresh account in under 20 minutes (CloudFront creation included) at near-zero cost | G-2 | PENDING-AWS | none |
+| ID | Assumption | Spec | Status | Prior evidence | Issue |
+|---|---|---|---|---|---|
+| T-30 | A Lambda package built on macOS (`pip --only-binary`) imports `qrcode` on python3.12 arm64 and writes SVG | A-6 | PENDING-AWS | ORIGIN (same packaging in the origin system) | [#18](https://github.com/FrancescoPolitano/placard/issues/18) |
+| T-31 | The python3.12 Lambda runtime ships the IANA tz database (`ZoneInfo("Europe/Rome")` works) | FR-27, FR-33 | PENDING-AWS | origin used `Europe/Rome` successfully (ORIGIN) | [#19](https://github.com/FrancescoPolitano/placard/issues/19) |
+| T-32 | Single-part upload ETag = MD5 of the body, and `CopyObject` with `MetadataDirective=REPLACE` under SSE-S3 keeps the same ETag | 10.6 steps 7-8, FR-23 | PENDING-AWS | ORIGIN for copy without the new content types | [#20](https://github.com/FrancescoPolitano/placard/issues/20) |
+| T-33 | S3 → SQS notifications filtered on `source/` carry URL-encoded keys (`+`, `%C2%B7`) and an `s3:TestEvent` at setup | 10.5, EC-23, EC-25 | ORIGIN | origin verification | [#130](https://github.com/FrancescoPolitano/placard/issues/130) |
+| T-34 | Writes to `public/` and `config/` produce no queue messages | EC-27 | PENDING-AWS | ORIGIN for `public/`; `config/` is new | [#21](https://github.com/FrancescoPolitano/placard/issues/21) |
+| T-35 | SQS event source with `maximum_concurrency = 2` and `ReportBatchItemFailures` retries only the failed message ids; reserved concurrency throttles pollers | FR-26, 11 | ORIGIN | 43 throttles observed with reserved concurrency 1 | [#131](https://github.com/FrancescoPolitano/placard/issues/131) |
+| T-36 | A 10-file upload of one item produces a single publication thanks to the 30 s window and prefix dedup | EC-1 | ORIGIN | caos run phase 1 | [#132](https://github.com/FrancescoPolitano/placard/issues/132) |
+| T-37 | Upload to visible page change takes ≤ 60 s | FR-20, FR-21, FR-22 | PENDING-AWS | ORIGIN ("within a minute" checks passed) | [#22](https://github.com/FrancescoPolitano/placard/issues/22) |
+| T-38 | CloudFront with OAC and `origin_path=/public` cannot reach `source/` or `config/` | 10.7, 10.8 | PENDING-AWS | ORIGIN for `source/` | [#23](https://github.com/FrancescoPolitano/placard/issues/23) |
+| T-39 | Origin 403 and 404 both surface as the themed `/404.html` with status 404 | FR-35 | ORIGIN | origin verification | [#133](https://github.com/FrancescoPolitano/placard/issues/133) |
+| T-40 | The ES5 CloudFront Function rewrites as tabled and leaves `/_assets/*` untouched | 10.7, EC-33 | PENDING-AWS | ORIGIN for tokens; `/_assets/` is new | [#24](https://github.com/FrancescoPolitano/placard/issues/24) |
+| T-41 | The response headers policy, CSP with `media-src` included, is applied to pages, media and error responses | 10.7 | PENDING-AWS | none for media | [#25](https://github.com/FrancescoPolitano/placard/issues/25) |
+| T-42 | CloudFront with `CachingOptimized` answers `206` with `Accept-Ranges: bytes` on `.mp4` range requests | FR-47 | PENDING-AWS | S4 deferred | [#26](https://github.com/FrancescoPolitano/placard/issues/26) |
+| T-43 | Invalidating `/{token}*` refreshes the page and every resource of the item | 10.6 step 11 | ORIGIN | origin verification | [#134](https://github.com/FrancescoPolitano/placard/issues/134) |
+| T-44 | `aws_lambda_invocation` runs at create and re-runs only when its `triggers` (theme fingerprint, package hash) change | FR-15, FR-41 | PENDING-AWS | none | [#27](https://github.com/FrancescoPolitano/placard/issues/27) |
+| T-45 | Example objects uploaded with `depends_on` on the module all produce notifications (none lost while notifications are being configured) | FR-41 | PENDING-AWS | none; mitigated by the post-upload republish-all | [#28](https://github.com/FrancescoPolitano/placard/issues/28) |
+| T-46 | Without `domain_name` the distribution serves HTTPS on the default certificate; the module plans and applies with the `aws.us_east_1` alias passed and zero ACM resources | FR-44 | PENDING-AWS | none | [#29](https://github.com/FrancescoPolitano/placard/issues/29) |
+| T-47 | `force_destroy = true` deletes a versioned bucket with noncurrent versions | FR-42 | PENDING-AWS | origin needed manual version cleanup (hence the variable) | [#30](https://github.com/FrancescoPolitano/placard/issues/30) |
+| T-48 | Republish-all lists item prefixes with delimiter listings on names containing ` · ` and its synthetic SQS messages are processed like S3 ones | 10.5 | PENDING-AWS | none | [#31](https://github.com/FrancescoPolitano/placard/issues/31) |
+| T-49 | `s3:ListBucket` restricted with `s3:prefix` conditions allows the publisher's delimiter listings of `source/` and `public/` | 10.8 | PENDING-AWS | ORIGIN for listing under both prefixes | [#32](https://github.com/FrancescoPolitano/placard/issues/32) |
+| T-50 | `uploader_principal_arns` can write only under `source/` | FR-46 | ORIGIN | origin policy | [#135](https://github.com/FrancescoPolitano/placard/issues/135) |
+| T-51 | Conservative pruning prevents overlapping runs from deleting fresh writes | EC-28 | ORIGIN | caos run | [#136](https://github.com/FrancescoPolitano/placard/issues/136) |
+| T-52 | Derived tokens make concurrent christening converge on one item | EC-2 | ORIGIN | 9 orphan tokens before the fix, 0 after | [#137](https://github.com/FrancescoPolitano/placard/issues/137) |
+| T-53 | Renaming or moving an item while keeping the token keeps the URL | FR-24, EC-4, EC-5 | ORIGIN | caos phase 3 | [#138](https://github.com/FrancescoPolitano/placard/issues/138) |
+| T-54 | A message in the dead-letter queue raises the CloudWatch alarm | FR-26 | PENDING-AWS | none | [#33](https://github.com/FrancescoPolitano/placard/issues/33) |
+| T-55 | `make demo` completes on a fresh account in under 20 minutes (CloudFront creation included) at near-zero cost | G-2 | PENDING-AWS | none | [#139](https://github.com/FrancescoPolitano/placard/issues/139) |
 
 ## Device assumptions (need a phone)
 
-| ID | Assumption | Spec | Status |
-|---|---|---|---|
-| T-60 | iOS Safari plays `.m4a` and `.mp4` opened directly under the CSP, over CloudFront range requests | FR-36 | PENDING-DEVICE |
-| T-61 | iOS Safari (≥ 16.2) renders `color-mix()` and the layout as Chrome does | FR-31 | PENDING-DEVICE |
-| T-62 | Android Chrome opens PDF, image, audio and video from the page (inline or via the system viewer) | FR-36 | PENDING-DEVICE |
-| T-63 | A plates-sheet QR code (96 pt side, level Q) scans with a phone camera at arm's length | FR-45 | PENDING-DEVICE |
+| ID | Assumption | Spec | Status | Issue |
+|---|---|---|---|---|
+| T-60 | iOS Safari plays `.m4a` and `.mp4` opened directly under the CSP, over CloudFront range requests | FR-36 | PENDING-DEVICE | [#35](https://github.com/FrancescoPolitano/placard/issues/35) |
+| T-61 | iOS Safari (≥ 16.2) renders `color-mix()` and the layout as Chrome does | FR-31 | PENDING-DEVICE | [#36](https://github.com/FrancescoPolitano/placard/issues/36) |
+| T-62 | Android Chrome opens PDF, image, audio and video from the page (inline or via the system viewer) | FR-36 | PENDING-DEVICE | [#37](https://github.com/FrancescoPolitano/placard/issues/37) |
+| T-63 | A plates-sheet QR code (96 pt side, level Q) scans with a phone camera at arm's length | FR-45 | PENDING-DEVICE | [#38](https://github.com/FrancescoPolitano/placard/issues/38) |
