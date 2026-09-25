@@ -860,4 +860,4 @@ deployments, and a manual check on an iOS phone plays the example audio and vide
 |---|---|---|
 | Q-1 | License | MIT |
 | Q-2 | Final project name (`placard` is free on the owner's GitHub account; PyPI and wider search not done) | keep `placard`, check before going public |
-| Q-3 | Permission from the origin system's owner before making the repository public | required; the repository stays private until then |
+| Q-3 | ~~Permission from the origin system's owner~~ | **Resolved 2026-09-25: not needed** (owner decision). The repository stays private until the owner decides to publish |

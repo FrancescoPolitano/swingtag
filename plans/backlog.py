@@ -14,16 +14,17 @@ are created from this file by `plans/create_backlog.py`. Each entry:
     done      acceptance criteria, each one verifiable
     deps      keys this item is blocked by
     closed    True when already done (kept for traceability)
+    reason    completed | not_planned, the close reason on GitHub
 """
 
 E, S, T, X = "epic", "story", "task", "experiment"
 
 
 def item(key, level, title, parent=None, area="process", priority="must", spec="",
-         what="", done=(), deps=(), closed=False):
+         what="", done=(), deps=(), closed=False, reason="completed"):
     return dict(key=key, level=level, title=title, parent=parent, area=area,
                 priority=priority, spec=spec, what=what, done=list(done),
-                deps=list(deps), closed=closed)
+                deps=list(deps), closed=closed, reason=reason)
 
 
 BACKLOG = [
@@ -63,10 +64,9 @@ BACKLOG = [
     item("assumptions-register", T, "Create the technical assumptions register", "S1.2",
          spec="spec/ASSUMPTIONS.md", done=["every technical assumption listed with experiment and status"],
          closed=True),
-    item("spec-review", T, "Owner review of SPEC 0.2 and decision on open questions Q-1..Q-3", "S1.2",
-         spec="SPEC 14", what="License (recommended MIT), final name, permission of the origin "
-                              "system's owner before going public.",
-         done=["review comments applied", "Q-1..Q-3 answered in SPEC 14", "SPEC status: approved"]),
+    item("spec-review", T, "Owner review of SPEC 0.2 and decision on open questions Q-1, Q-2", "S1.2",
+         spec="SPEC 14", what="License (recommended MIT) and final name. Q-3 (permission) resolved: not needed.",
+         done=["review comments applied", "Q-1 and Q-2 answered in SPEC 14", "SPEC status: approved"]),
     item("test-plan", T, "Write spec/TEST-PLAN.md (phase 4)", "S1.2", spec="spec/README.md phase 4",
          what="Every test with name, input, expected output; unit, Terraform, live and device "
               "levels; mapped to FR/EC/US.",
@@ -87,10 +87,11 @@ BACKLOG = [
          what="As a contributor, I want a disposable AWS stack to run the experiments that "
               "cannot run locally.",
          done=["an account and a budget alarm exist", "a minimal stack deploys and destroys cleanly"]),
-    item("aws-account", T, "Choose the AWS account for experiments and demo, with a budget alarm",
-         "S1.3", what="Owner decision: personal account recommended. Create a 10 USD budget alarm "
-                      "and a named CLI profile.",
-         done=["profile name recorded in CLAUDE.md", "budget alarm active"]),
+    item("aws-account", T, "Choose the AWS account for experiments",
+         "S1.3", what="Decided 2026-09-25: experiments run on the owner's existing lab account; the "
+                      "CLI profile lives in the owner's local configuration, never in the repository. "
+                      "Every experiment resource is tagged project=placard and destroyed after use.",
+         done=["account decided", "tagging and destroy-after-use rule stated"], closed=True),
     item("aws-harness", T, "Experiment harness: minimal Terraform stack in spec/experiments/aws/",
          "S1.3", area="infra",
          what="Bucket (versioned, SSE-S3), SQS queue + DLQ, stub Lambda (python3.12 arm64) wired "
@@ -469,7 +470,8 @@ BACKLOG = [
     item("S8.3", S, "Go public", "E8", area="docs",
          done=["repository public with a fresh, sanitised history"]),
     item("permission", T, "Obtain permission from the origin system's owner", "S8.3", area="docs",
-         spec="Q-3", what="Owner action outside the repository.", done=["written permission recorded"]),
+         spec="Q-3", what="Not needed: owner decision of 2026-09-25. Closed as not planned.",
+         done=["decision recorded in SPEC 14"], closed=True, reason="not_planned"),
     item("name-check", T, "Check the name placard on GitHub, PyPI and general search", "S8.3",
          area="docs", spec="Q-2", done=["decision recorded in SPEC 14"]),
     item("sanitise", T, "Sanitisation check before publishing", "S8.3", area="docs",
@@ -479,5 +481,6 @@ BACKLOG = [
          deps=["readme"]),
     item("go-public", T, "Switch the repository to public", "S8.3", area="docs",
          done=["repository visibility public", "project board visibility decided"],
-         deps=["permission", "name-check", "sanitise", "license", "screenshots"]),
+         what="Only when the owner decides to publish; the repository stays private until then.",
+         deps=["name-check", "sanitise", "license", "screenshots"]),
 ]

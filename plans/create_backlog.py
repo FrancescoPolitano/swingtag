@@ -14,12 +14,17 @@ What it does, for each backlog entry in order:
   4. adds it to the project and sets Status, Level and Priority;
   5. closes it if the entry is marked closed.
 
+On reruns it also reconciles: titles and bodies changed in backlog.py are pushed,
+dependencies removed from backlog.py are deleted, closed entries are closed with
+their reason, and project fields follow the entries.
+
 State is kept in plans/backlog-issues.json (key -> number, id, node_id, item id),
 so a rerun skips what exists. Content-creating calls are spaced to stay under
 GitHub's secondary rate limits.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -162,10 +167,30 @@ def main() -> None:
             time.sleep(PAUSE)
     print("sub-issues linked", flush=True)
 
+    # 2b. titles and bodies follow backlog.py
+    for e in BACKLOG:
+        s = state[e["key"]]
+        body = body_for(e, numbers, titles)
+        digest = hashlib.sha256((e["title"] + "\0" + body).encode()).hexdigest()
+        if s.get("body_hash") != digest:
+            gh("api", f"repos/{OWNER}/{REPO}/issues/{s['number']}", "-X", "PATCH",
+               input_json={"title": e["title"], "body": body})
+            s["body_hash"] = digest
+            save_state(state)
+            time.sleep(PAUSE)
+    print("titles and bodies reconciled", flush=True)
+
     # 3. dependencies
     for e in BACKLOG:
         s = state[e["key"]]
         done = set(s.get("deps_done", []))
+        for d in sorted(done - set(e["deps"])):
+            gh("api", f"repos/{OWNER}/{REPO}/issues/{s['number']}/dependencies/blocked_by/"
+               f"{state[d]['id']}", "-X", "DELETE")
+            done.discard(d)
+            s["deps_done"] = sorted(done)
+            save_state(state)
+            time.sleep(PAUSE)
         for d in e["deps"]:
             if d in done:
                 continue
@@ -209,7 +234,7 @@ def main() -> None:
         s = state[e["key"]]
         if e["closed"] and not s.get("closed"):
             gh("api", f"repos/{OWNER}/{REPO}/issues/{s['number']}", "-X", "PATCH",
-               "-f", "state=closed", "-f", "state_reason=completed")
+               "-f", "state=closed", "-f", f"state_reason={e['reason']}")
             s["closed"] = True
             save_state(state)
             time.sleep(PAUSE)
