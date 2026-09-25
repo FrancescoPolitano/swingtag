@@ -79,7 +79,7 @@ BACKLOG = [
          spec="spec/README.md phase 5",
          what="File by file, function by function, referencing the backlog task keys.",
          done=["no architectural decision appears in the plan that is not in the spec",
-               "owner approval"], deps=["test-plan"]),
+               "owner approval"], deps=["test-plan"], status="In review"),
     item("repo-claude-md", T, "Add CLAUDE.md with the SDD rules for agents working on the repo",
          "S1.2", spec="spec/README.md",
          done=["red flag rule, ambiguity rule, assumptions rule and backlog workflow stated",
