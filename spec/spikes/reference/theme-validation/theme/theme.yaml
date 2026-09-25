@@ -1,0 +1,10 @@
+locale: it
+timezone: Europe/Rome
+logo: logo.svg
+header: "Trattoria"
+colors:
+  primary: "#8a2d1c"
+  background: "#fbf7f2"
+  text: "#1f1b16"
+strings:
+  updated: "Menu aggiornato il"
