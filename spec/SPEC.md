@@ -521,6 +521,15 @@ swingtag/
   Makefile  README.md  LICENSE  CLAUDE.md  pyproject.toml
 ```
 
+**Naming rule (keeps a rename mechanical).** The project name appears only in: the Python
+package directory `src/swingtag/` and `pyproject.toml`; the Terraform variable `name`
+(default `swingtag`), from which every AWS resource name is derived; the README title; the
+repository and project board names. Code imports within the package are relative
+(`from .catalog import …`), Terraform never repeats the literal name outside the `name`
+default, and example deployments pass `name` explicitly. A rename is therefore: rename the
+package directory, change three literals, rename repository and board. A test asserts that
+the literal project name occurs in no file under `src/` other than `__init__.py`.
+
 `convention`, `formats`, `theme`, `i18n`, `catalog`, `render` and `qr` import nothing
 from AWS. `publish` and `handler` are the only modules that use `boto3`.
 
