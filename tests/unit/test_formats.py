@@ -39,3 +39,58 @@ def test_lookup_unknown():
 def test_lookup_last_extension():
     """Review Focus 3."""
     assert f.lookup("menu.v2.final.pdf").kind == "document"
+
+
+URL = "https://example.com/book?table=2"
+
+
+def test_link_url_crlf():
+    assert f.parse_link("x.url", f"[InternetShortcut]\r\nURL={URL}\r\n".encode()) == URL
+
+
+def test_link_url_bom():
+    body = ("﻿[InternetShortcut]\nURL=" + URL + "\n").encode("utf-8")
+    assert f.parse_link("x.url", body) == URL
+
+
+def test_link_webloc_xml():
+    assert f.parse_link("x.webloc", plistlib.dumps({"URL": URL}, fmt=plistlib.FMT_XML)) == URL
+
+
+def test_link_webloc_binary():
+    assert f.parse_link("x.webloc", plistlib.dumps({"URL": URL}, fmt=plistlib.FMT_BINARY)) == URL
+
+
+def test_link_rejects_javascript():
+    assert f.parse_link("x.url", b"[InternetShortcut]\nURL=javascript:alert(1)\n") is None
+
+
+def test_link_rejects_data():
+    assert f.parse_link("x.webloc", plistlib.dumps({"URL": "data:text/html,x"})) is None
+
+
+def test_link_rejects_file():
+    assert f.parse_link("x.url", b"[InternetShortcut]\nURL=file:///etc/passwd\n") is None
+
+
+def test_link_rejects_relative():
+    assert f.parse_link("x.url", b"[InternetShortcut]\nURL=/book\n") is None
+
+
+def test_link_rejects_no_section():
+    assert f.parse_link("x.url", b"URL=https://example.com\n") is None
+
+
+def test_link_rejects_garbage_plist():
+    assert f.parse_link("x.webloc", b"\x00\x01not a plist") is None
+
+
+def test_link_size_cap():
+    body = f"[InternetShortcut]\nURL={URL}\n".encode().ljust(f.MAX_LINK_BYTES + 1, b" ")
+    assert f.parse_link("x.url", body) is None
+
+
+def test_link_non_ascii_url():
+    """Review Focus 5."""
+    url = "https://bücher.example/ü"
+    assert f.parse_link("x.url", f"[InternetShortcut]\nURL={url}\n".encode()) == url

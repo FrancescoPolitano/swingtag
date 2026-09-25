@@ -41,3 +41,39 @@ def lookup(filename: str) -> Format | None:
     if not dot:
         return None
     return FORMATS.get(f".{ext.casefold()}")
+
+
+MAX_LINK_BYTES = 65536
+_ALLOWED_SCHEMES = frozenset({"http", "https"})
+
+
+def parse_link(filename: str, body: bytes) -> str | None:
+    """Target URL of a .url or .webloc file, or None if unreadable or not http(s).
+
+    .url is an INI file ([InternetShortcut], key URL); .webloc is a property list,
+    XML or binary (macOS writes binary when a link is dragged from a browser).
+    """
+    if len(body) > MAX_LINK_BYTES:
+        return None
+    name = filename.casefold()
+    url: object = None
+    if name.endswith(".url"):
+        parser = configparser.ConfigParser(interpolation=None, strict=False)
+        try:
+            parser.read_string(body.decode("utf-8-sig", errors="replace"))
+        except configparser.Error:
+            return None
+        url = parser.get("InternetShortcut", "URL", fallback=None)
+    elif name.endswith(".webloc"):
+        try:
+            data = plistlib.loads(body)
+        except Exception:  # plistlib raises several unrelated types on bad input
+            return None
+        url = data.get("URL") if isinstance(data, dict) else None
+    if not isinstance(url, str):
+        return None
+    url = url.strip()
+    parts = urlsplit(url)
+    if parts.scheme.lower() not in _ALLOWED_SCHEMES or not parts.netloc:
+        return None
+    return url
