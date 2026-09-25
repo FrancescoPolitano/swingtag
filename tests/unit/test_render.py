@@ -137,3 +137,12 @@ def test_empty_label_heading_falls_back(theme):
     """Review Focus 2."""
     html = r.render_page(cat.Item(collection="Vivaio", label="", token=TOKEN), theme)
     assert "<h1>Vivaio</h1>" in html
+
+
+def test_not_found_page():
+    theme = t.Theme(locale="en", header="Tides of Light")
+    html = r.render_not_found(theme)
+    assert "<h1>Page not available</h1>" in html
+    assert "This code does not match any published page." in html
+    assert TOKEN not in html
+    assert "<script" not in html

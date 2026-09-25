@@ -104,3 +104,16 @@ def render_page(item: Item, theme: Theme) -> str:
         parts.append("<footer>" + "".join(footer) + "</footer>")
     parts.append("</div></body></html>")
     return "".join(parts)
+
+
+def render_not_found(theme: Theme) -> str:
+    """Page for any unknown path. Reveals nothing about which tokens exist."""
+    title = theme.string("not_found_title")
+    return "".join([
+        _head(title, theme),
+        "<body><div class=wrap>",
+        f"<div class=notice>{escape(theme.notice)}</div>" if theme.notice else "",
+        f"<header>{_header(theme, '')}<h1>{escape(title)}</h1></header>",
+        f"<div class=empty>{escape(theme.string('not_found_body'))}</div>",
+        "</div></body></html>",
+    ])
