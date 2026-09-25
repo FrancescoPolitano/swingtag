@@ -126,3 +126,28 @@ def test_with_token_roundtrip():
 def test_empty_label_split():
     """Review Focus 2: a folder that is only separator and token."""
     assert c.split_item_name(" · 3xk9m2p7qhv4") == ("", "3xk9m2p7qhv4")
+
+
+def test_slug_accents():
+    assert c.slug("Manutenzione perché", "entry") == "manutenzione-perche"
+
+
+def test_slug_table_letters():
+    assert [c.slug(v, "entry") for v in ["Straße", "Œuvre", "Ølstue", "Łódź"]] == [
+        "strasse",
+        "oeuvre",
+        "olstue",
+        "lodz",
+    ]
+
+
+def test_slug_fallback():
+    assert c.slug("★★★", "entry") == "entry"
+    assert c.slug("★★★", "file") == "file"
+
+
+def test_unique_slug_collision():
+    taken: set[str] = set()
+    assert c.unique_slug("Care/1", taken, "entry") == "care-1"
+    assert c.unique_slug("Care 1", taken, "entry") == "care-1-2"
+    assert c.unique_slug("Care 1", taken, "entry") == "care-1-3"

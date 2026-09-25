@@ -103,3 +103,30 @@ def split_item_name(folder: str) -> tuple[str, str | None]:
 
 def with_token(label: str, token: str) -> str:
     return f"{label.strip()}{SEPARATOR}{token}"
+
+
+# Letters with no ASCII decomposition: NFKD alone drops them ("Straße" -> "strae",
+# spec/ASSUMPTIONS.md T-05), so they are replaced first.
+_TRANSLITERATION = str.maketrans({
+    "ß": "ss", "ẞ": "SS", "æ": "ae", "Æ": "AE", "œ": "oe", "Œ": "OE",
+    "ø": "o", "Ø": "O", "đ": "d", "Đ": "D", "ł": "l", "Ł": "L", "þ": "th", "Þ": "Th",
+})
+
+
+def slug(value: str, fallback: str) -> str:
+    """URL-safe form: ASCII, lowercase, hyphens. Accents are transliterated, not dropped."""
+    decomposed = unicodedata.normalize("NFKD", value.translate(_TRANSLITERATION))
+    ascii_only = decomposed.encode("ascii", "ignore").decode("ascii").casefold()
+    hyphenated = re.sub(r"[^a-z0-9]+", "-", ascii_only).strip("-")
+    return hyphenated or fallback
+
+
+def unique_slug(value: str, taken: set[str], fallback: str) -> str:
+    """A slug not yet in `taken` (a numeric suffix resolves collisions); records it."""
+    base = slug(value, fallback)
+    candidate, counter = base, 2
+    while candidate in taken:
+        candidate = f"{base}-{counter}"
+        counter += 1
+    taken.add(candidate)
+    return candidate
