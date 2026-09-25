@@ -122,3 +122,44 @@ def test_multi_dot_filename():
     """Review Focus 3."""
     item = build(obj("10 Menus/menu.v2.final.pdf"), obj("10 Menus/other.pdf"))
     assert [b.label for b in item.buttons] == ["menu.v2.final", "other"]
+
+
+BOOK = "https://example.com/book"
+
+
+def url_body(url):
+    return f"[InternetShortcut]\nURL={url}\n".encode()
+
+
+def test_link_button():
+    link = obj("50 Book/book.url")
+    [b] = build(link, links={link.key: url_body(BOOK)}).buttons
+    assert (b.kind, b.href, b.public_key, b.label) == ("link", BOOK, None, "Book")
+
+
+def test_invalid_link_anomaly():
+    link = obj("50 Book/book.url")
+    item = build(link, links={link.key: url_body("javascript:alert(1)")})
+    assert item.buttons == [] and reasons(item) == ["invalid link"]
+
+
+def test_links_not_published():
+    link = obj("50 Book/book.url")
+    item = build(obj("10 A/x.pdf"), link, links={link.key: url_body(BOOK)})
+    assert cat.published_keys(PUB, item) == {
+        f"public/{TOKEN}/index.html",
+        f"public/{TOKEN}/qr.svg",
+        f"public/{TOKEN}/a/x.pdf",
+    }
+
+
+def test_only_invalid_links_is_empty():
+    link = obj("50 Book/book.webloc")
+    item = build(link, links={link.key: plistlib.dumps({"URL": "data:x"})})
+    assert item.empty
+
+
+def test_updated_at_max_including_links():
+    link = obj("50 Book/book.url", day=5)
+    item = build(obj("10 A/x.pdf", day=1), link, links={link.key: url_body(BOOK)})
+    assert item.updated_at == datetime(2026, 9, 5, tzinfo=timezone.utc)

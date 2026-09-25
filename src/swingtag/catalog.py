@@ -181,6 +181,8 @@ def build_item(source_prefix: str, public_prefix: str, prefix: str,
 
 
 def published_keys(public_prefix: str, item: Item) -> set[str]:
-    """Keys the public zone must hold for this item (completed in Task 11)."""
+    """Keys the public zone must hold for this item: page, QR code, copied files."""
     base = f"{public_prefix}{item.token}/"
-    return {f"{base}index.html", f"{base}qr.svg"}
+    keys = {f"{base}index.html", f"{base}qr.svg"}
+    keys.update(b.public_key for b in item.buttons if b.public_key is not None)
+    return keys
