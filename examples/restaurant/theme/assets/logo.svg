@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Osteria Quattro Mestoli">
+  <circle cx="32" cy="32" r="30" fill="#8a2d1c"/>
+  <circle cx="32" cy="32" r="25" fill="none" stroke="#fbf7f2" stroke-width="1.5"/>
+  <path d="M25 16v12a3 3 0 0 0 3 3v17M28 16v12M31 16v12a3 3 0 0 1-3 3" fill="none" stroke="#fbf7f2" stroke-width="2" stroke-linecap="round"/>
+  <path d="M39 16c-3 3-3 11 0 14v18" fill="none" stroke="#fbf7f2" stroke-width="2" stroke-linecap="round"/>
+</svg>

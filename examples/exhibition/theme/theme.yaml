@@ -1,0 +1,11 @@
+# Fictional exhibition, gallery and artist (names checked by web search).
+locale: en
+timezone: Europe/London
+logo: logo.svg
+header: "Gull Street Gallery"
+footer: "Open Tuesday to Sunday, 10-18 · Until 31 January"
+notice: "Demo environment: fictional exhibition and content."
+colors:
+  primary: "#8c6d0f"
+  background: "#fbf8f1"
+  text: "#14213d"

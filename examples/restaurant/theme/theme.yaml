@@ -1,0 +1,13 @@
+# Fictional business: any resemblance to a real restaurant is coincidental.
+locale: it
+timezone: Europe/Rome
+logo: logo.svg
+header: "Osteria Quattro Mestoli"
+footer: "Via del Borgo 4 · Aperti a pranzo e a cena, chiuso il lunedì"
+notice: "Ambiente dimostrativo: attività e contenuti di fantasia."
+colors:
+  primary: "#8a2d1c"
+  background: "#fbf7f2"
+  text: "#1f1b16"
+strings:
+  updated: "Menu aggiornato il"

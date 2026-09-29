@@ -1,0 +1,16 @@
+LICENSE
+README.md
+pyproject.toml
+src/swingtag/__init__.py
+src/swingtag/catalog.py
+src/swingtag/convention.py
+src/swingtag/formats.py
+src/swingtag/i18n.py
+src/swingtag/qr.py
+src/swingtag/render.py
+src/swingtag/theme.py
+src/swingtag.egg-info/PKG-INFO
+src/swingtag.egg-info/SOURCES.txt
+src/swingtag.egg-info/dependency_links.txt
+src/swingtag.egg-info/requires.txt
+src/swingtag.egg-info/top_level.txt

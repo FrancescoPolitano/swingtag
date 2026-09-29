@@ -1,0 +1,11 @@
+output "bucket" { value = aws_s3_bucket.site.id }
+output "source_prefix" { value = "source/" }
+output "base_url" { value = local.base_url }
+output "distribution_id" { value = aws_cloudfront_distribution.site.id }
+output "distribution_domain" { value = aws_cloudfront_distribution.site.domain_name }
+output "function_name" { value = aws_lambda_function.publisher.function_name }
+output "publish_queue_url" { value = aws_sqs_queue.publish.id }
+output "dead_letter_queue_url" { value = aws_sqs_queue.dead_letter.id }
+output "alarm_name" { value = aws_cloudwatch_metric_alarm.dead_letter.alarm_name }
+output "certificate_count" { value = length(aws_acm_certificate.site) }
+output "theme_fingerprint" { value = local.fingerprint }

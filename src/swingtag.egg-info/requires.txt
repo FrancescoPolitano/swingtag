@@ -1,0 +1,7 @@
+qrcode==8.2
+
+[dev]
+pytest>=8
+opencv-python-headless>=4.9
+pyyaml>=6
+boto3>=1.34

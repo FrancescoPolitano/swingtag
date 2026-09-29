@@ -1,0 +1,29 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+      - run: terraform fmt -check -recursive
+      - run: node terraform/functions/test_rewrite.mjs
+      - run: terraform -chdir=terraform init -backend=false -input=false
+      - run: terraform -chdir=terraform test
+      - run: ./scripts/build_lambda.sh
+      - run: |
+          for ex in restaurant nursery exhibition; do
+            terraform -chdir=examples/$ex init -backend=false -input=false >/dev/null
+            terraform -chdir=examples/$ex validate
+          done
+      - run: terraform -chdir=examples/restaurant test

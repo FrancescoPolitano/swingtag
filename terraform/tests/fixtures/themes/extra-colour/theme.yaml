@@ -1,0 +1,13 @@
+locale: it
+timezone: Europe/Rome
+logo: logo.svg
+header: "Osteria"
+footer: "Via del Borgo 4"
+show_updated: true
+colors:
+  primary: "#8a2d1c"
+  background: "#fbf7f2"
+  text: "#1f1b16"
+  accent: blue
+strings:
+  updated: "Menu aggiornato il"

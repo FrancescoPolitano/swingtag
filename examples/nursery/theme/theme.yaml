@@ -1,0 +1,13 @@
+# Fictional business: any resemblance to a real nursery is coincidental.
+locale: it
+timezone: Europe/Rome
+logo: logo.svg
+header: "Vivaio Radici Lente"
+footer: "Strada dei Campi 12 · Aperto tutti i giorni, 8-19"
+notice: "Ambiente dimostrativo: attività e contenuti di fantasia."
+colors:
+  primary: "#3d6b4f"
+  background: "#f4f1ea"
+  text: "#1d241f"
+strings:
+  updated: "Scheda aggiornata il"

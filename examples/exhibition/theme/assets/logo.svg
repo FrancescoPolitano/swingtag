@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Gull Street Gallery">
+  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#8c6d0f" stroke-width="4"/>
+  <rect x="12" y="12" width="40" height="40" fill="#14213d"/>
+  <path d="M12 40c6-4 10-4 16 0s10 4 16 0 6-4 8-3M12 46c6-4 10-4 16 0s10 4 16 0 6-4 8-3" fill="none" stroke="#fbf8f1" stroke-width="1.8"/>
+  <circle cx="40" cy="24" r="5" fill="#c9a227"/>
+</svg>
